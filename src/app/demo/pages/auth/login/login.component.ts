@@ -1,6 +1,6 @@
 // angular import
 import { Component } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 // project import
@@ -14,10 +14,19 @@ import { SharedModule } from 'src/app/demo/shared/shared.module';
 })
 export default class LoginComponent {
   // public props
-  hide = true;
+  hide: boolean = true; // Controla la visibilidad de la contraseña
   email = new FormControl('', [Validators.required, Validators.email]);
-  Email = 'info@phoenixcoded.co';
-  password = '123456';
+  Email: string = ''; // Inicializa la propiedad Email
+  password: string = ''; // Inicializa la propiedad password
+  loginForm: FormGroup;
+
+  constructor(private fb: FormBuilder) {
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      rememberMe: [false]
+    });
+  }
 
   // public method
   getErrorMessage() {
@@ -28,7 +37,7 @@ export default class LoginComponent {
     return this.email.hasError('email') ? 'Not a valid email' : '';
   }
   loginType = [
-    {
+    /*{
       image: 'assets/images/authentication/facebook.svg',
       alt: 'facebook',
       title: 'Sign In with Facebook'
@@ -42,6 +51,15 @@ export default class LoginComponent {
       image: 'assets/images/authentication/google.svg',
       alt: 'google',
       title: 'Sign In with Google'
-    }
+    }*/
   ];
+
+  onSubmit() {
+    if (!this.Email || !this.password) {
+      console.error('Formulario inválido: faltan campos obligatorios.');
+      return;
+    }
+    console.log('Formulario enviado:', { Email: this.Email, password: this.password });
+  }
+
 }
