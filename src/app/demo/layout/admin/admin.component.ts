@@ -1,5 +1,5 @@
 // Angular import
-import { Component, OnInit, inject, viewChild } from '@angular/core';
+import { Component, NgModule, OnInit, inject, viewChild } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatDrawer, MatDrawerMode } from '@angular/material/sidenav';
 
@@ -13,6 +13,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { NavBarComponent } from 'src/app/@theme/layouts/toolbar/toolbar.component';
 import { VerticalMenuComponent } from 'src/app/@theme/layouts/menu/vertical-menu';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-admin',
@@ -20,6 +21,7 @@ import { VerticalMenuComponent } from 'src/app/@theme/layouts/menu/vertical-menu
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
+
 export class AdminComponent implements OnInit {
   private breakpointObserver = inject(BreakpointObserver);
   private layoutService = inject(LayoutService);
