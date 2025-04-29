@@ -9,8 +9,6 @@ import { environment } from 'src/environments/environment';
 
 export class LoginService {
 
-
-
   private _URL: string = '';
 
   constructor(private http: HttpClient) 
@@ -19,17 +17,13 @@ export class LoginService {
   }
 
   login(data: any): Observable<any> {
-    {
       let authorizationHeaders = new HttpHeaders({
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type',
         //'Authorization': `Bearer ${tokenAuth}`,
       });
 
-      console.log('login', data);
-
-      return this.http.post(`${this._URL}/login`, data,  { headers: authorizationHeaders });
-    }
+      return this.http.post(`${this._URL}/login`, data, { headers: authorizationHeaders });
   }
 
  

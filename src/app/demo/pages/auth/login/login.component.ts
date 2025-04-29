@@ -1,11 +1,11 @@
 // angular import
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { LoginService } from 'src/app/@theme/services/login.service';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 
-// project import
 import { SharedModule } from 'src/app/demo/shared/shared.module';
 
 @Component({
@@ -21,10 +21,12 @@ export default class LoginComponent {
   Email: string = ''; // Inicializa la propiedad Email
   password: string = ''; // Inicializa la propiedad password
   loginForm: FormGroup;
+  
 
   constructor(
     private fb: FormBuilder,
-    private loginService: LoginService 
+    private loginService: LoginService,
+    private router: Router // Inyecta Router
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -45,15 +47,34 @@ export default class LoginComponent {
   ];
 
   async onSubmit() {
-    if (!this.Email || !this.password) {
-      console.error('Formulario inválido: faltan campos obligatorios.');
-      return;
+
+    try {
+      if (!this.Email || !this.password) {
+        console.error('Formulario inválido: faltan campos obligatorios.');
+        return;
+      }
+      
+      let body = {
+        email: this.Email,
+        password: this.password
+      };
+
+      let resp = await this.loginService.login(body).toPromise();
+
+      if (resp.success == true) {
+        console.log('exito:', resp.data);
+        localStorage.setItem('token', resp.data);
+        this.router.navigate(['/dashboard']);
+        return;
+        return;
+      }else{
+        console.log('error:', resp);
+        return;
+      }
+
+    } catch (error) {
+      console.error('Error al enviar el formulario:', error);
     }
-    console.log('Formulario enviado:', { Email: this.Email, password: this.password });
-
-    let resp = await this.loginService.login({ Email: this.Email, password: this.password });
-
-    console.log('Respuesta del servicio:', resp);
     
 
   }

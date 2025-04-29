@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import DashboardComponent from './demo/pages/dashboard/dashboard.component';
 
-// project import
 import { AdminComponent } from './demo/layout/admin';
 import { EmptyComponent } from './demo/layout/empty';
 
@@ -38,7 +38,8 @@ const routes: Routes = [
         loadChildren: () => import('./demo/pages/auth/auth.module').then((m) => m.AuthModule)
       }
     ]
-  }
+  },
+  { path: 'dashboard', component: DashboardComponent },
 ];
 
 @NgModule({
