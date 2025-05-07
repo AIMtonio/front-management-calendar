@@ -151,4 +151,6 @@ export default class DashboardComponent {
       number: '+$763,43'
     }
   ];
+
+  
 }

@@ -188,5 +188,23 @@ export const menus: Navigation[] = [
         icon: '#custom-notification-status'
       }
     ]
+  },
+  {
+    id: 'auth',
+    title: 'Mis eventos',
+    type: 'group',
+    icon: 'icon-navigation',
+    children: [
+      {
+        id: 'events-management',
+        title: 'Eventos',
+        type: 'item',
+        classes: 'nav-item',
+        url: '/events-management',
+        icon: '#custom-shield',
+        target: false,
+        breadcrumbs: false
+      }
+    ]
   }
 ];

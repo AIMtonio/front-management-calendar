@@ -26,6 +26,10 @@ const routes: Routes = [
       {
         path: 'sample-page',
         loadComponent: () => import('./demo/pages/other/sample-page/sample-page.component')
+      },
+      {
+        path: 'events-management',
+        loadComponent: () => import('./demo/pages/events-management/events-management.component')
       }
     ]
   },
@@ -43,7 +47,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes)
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
