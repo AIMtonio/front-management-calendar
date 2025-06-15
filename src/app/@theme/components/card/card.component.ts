@@ -63,4 +63,8 @@ export class CardComponent {
    * Template reference for mat-actions at bottom
    */
   @ContentChild('actionTemplate') actionTemplate!: TemplateRef<ElementRef>;
+  @ContentChild('actionTemplate2') actionTemplate2!: TemplateRef<ElementRef>;
+
+
+
 }

@@ -1,89 +1,135 @@
 <div class="row p-t-25">
   <div class="col-12">
-    <app-card cardTitle="Gestión de eventos">  
+    <app-card cardTitle="Gestión de eventos">
       <div class="row p-t-20">
         <div class="col-12">
           <br cardTitle="Hello card">
-            <div class="row widget-chart p-t-25">
-              <div class="col-md-12">
-                <app-card cardTitle="Mis calendarios" headerClass="transaction-card-header" actionClass="card-action block" [padding]="0">
-                  <mat-tab-group mat-stretch-tabs="false" class="transactions" mat-align-tabs="start">
-                    <mat-tab label="Todos los calendarios">
-                      <ng-container *ngTemplateOutlet="Transaction"></ng-container>
-                    </mat-tab>  
-                  </mat-tab-group>
-                  <ng-template #actionTemplate>
-                    <div class="row g-2">
-                      <div class="col-lg-6 m-t-10">
-                        <div class="grid">
-                          <button class="grid b-rad-20" mat-stroked-button
-                          (click)="ConsultarCustomCalendar()"
-                            ><span class="text-truncate w-100">Ver detalles de eventos</span></button
-                          >
-                        </div>
-                      </div>
-                      <div class="col-lg-6 m-t-10">
-                        <div class="grid">
-                          <button class="grid b-rad-20" mat-flat-button color="primary"
-                          (click)="mostrarFormulario = !mostrarFormulario"
-                            ><span class="text-truncate w-100">Crear nuevo evento</span></button
-                          >
-                        </div>
+          <div class="row widget-chart p-t-25">
+            <div class="col-md-12">
+              <app-card cardTitle="Mis calendarios" headerClass="transaction-card-header"
+                actionClass="card-action block" [padding]="0">
+                <mat-tab-group mat-stretch-tabs="false" class="transactions" mat-align-tabs="start">
+                  <mat-tab label="Todos los calendarios">
+                    <ng-container *ngTemplateOutlet="Transaction"></ng-container>
+                  </mat-tab>
+                </mat-tab-group>
+                <ng-template #actionTemplate2>
+                  <div class="row g-2">
+                    <div class="col-lg-4 m-t-10">
+                      <div class="grid">
+                        <button class="grid b-rad-20" mat-stroked-button (click)="ConsultarCustomCalendar()"><span
+                            class="text-truncate w-100">Ver detalles de eventos</span></button>
                       </div>
                     </div>
-                  </ng-template>
-                </app-card>
-              </div>
-            </div>
-
-            <!-- Apartado oculto para el formulario -->
-            <div *ngIf="mostrarFormulario" class="mt-4">
-              <app-card cardTitle="Crear calendario personalizado">
-                <form (ngSubmit)="crearCustomCalendar()">
-                  <div class="form-group mb-3">
-                    <label for="nombreEvento">Nombre del calendario  </label>
-                    <input type="text" id="calendar_name" class="form-control" [(ngModel)]="calendar_name" name="calendar_name" required>
-                  </div>
-                  <br>
-                  <div class="col-lg-2 m-t-10">
-                    <div class="grid">
-                            <button type="submit" class="grid b-rad-20" mat-flat-button color="primary"
-                              ><span class="text-truncate w-100">Crear calendario</span></button
-                            >
+                    <div class="col-lg-4 m-t-10">
+                      <div class="grid">
+                        <button class="grid b-rad-20" mat-flat-button color="primary"
+                          (click)="mostrarFormulario = !mostrarFormulario"><span class="text-truncate w-100">Crear nuevo
+                            evento</span></button>
+                      </div>
                     </div>
+                    <!--zzzz-->
                   </div>
-                </form>
+                </ng-template>
               </app-card>
             </div>
-            <!-- Fin del apartado oculto -->
+          </div>
 
-            <ng-template #Transaction>
+          <!-- Apartado oculto para el formulario -->
+          <div *ngIf="mostrarFormulario" class="mt-4">
+            <app-card cardTitle="Crear calendario personalizado">
+              <form (ngSubmit)="crearCustomCalendar()">
+                <div class="form-group mb-3">
+                  <label for="nombreEvento">Nombre del calendario </label>
+                  <input type="text" id="calendar_name" class="form-control" [(ngModel)]="calendar_name"
+                    name="calendar_name" required>
+                </div>
+                <br>
+                <div class="col-lg-2 m-t-10">
+                  <div class="grid">
+                    <button type="submit" class="grid b-rad-20" mat-flat-button color="primary"><span
+                        class="text-truncate w-100">Crear calendario</span></button>
+                  </div>
+                </div>
+              </form>
+            </app-card>
+          </div>
+          <!-- Fin del apartado oculto -->
+
+          <!-- Apartado extra oculto -->
+          <div *ngIf="mostrarApartadoExtra" class="mt-4">
+            <app-card cardTitle="Detalles del calendario personalizado">
+              <p>Aqui se muestran los detalles del calendario seleccionado</p>
               <ul class="list-group list-group-flush">
-                @for (task of List_transactionEvent; track task) {
-                  <li class="list-group-item">
-                    <div class="flex align-item-center">
-                      <div class="flex-shrink-0">
-                        <div class="avatar avatar-s border {{ task.bg }}" matTooltip="{{ task.tooltip }}">{{ task.icon }}</div>
+                <li class="list-group-item" *ngFor="let item of List_transactionEvent2">
+                  <div class="flex align-item-center">
+                    <div class="flex-shrink-0">
+                      <div class="avatar avatar-s border text-primary-500 bg-primary-50">
+                        {{ item.icon || 'C' }}
                       </div>
-                      <div class="flex-grow-1 m-l-15">
-                        <div class="row g-1">
-                          <div class="col-6">
-                            <h6 class="m-b-0">{{ task.name }}</h6>
-                            <p class="text-muted m-b-0"
-                              ><small>{{ task.time }}</small></p
-                            >
-                          </div>
-                          <div class="col-6 text-end">
-                            <h6 class="m-b-5">{{ task.amount }}</h6>
-                            <p class="{{ task.amount_type }} m-b-0"><i class="{{ task.amount_position }}"></i> {{ task.percentage }} </p>
-                          </div>
+                    </div>
+                    <div class="flex-grow-1 m-l-15">
+                      <div class="row g-1">
+                        <div class="col-6">
+                          <h6 class="m-b-0">{{ item.calendar_name || item.name }}</h6>
+                          <p class="text-muted m-b-0">
+                            <small>{{ item.calendar_name || item.time }}</small>
+                          </p>
+                        </div>
+                        <div class="col-6 text-end">
+                          <h6 class="m-b-5">{{ item.amount }}</h6>
+                          <p class="{{ item.amount_type }} m-b-0"><i class="{{ item.amount_position }}"></i> {{
+                            item.percentage }} </p>
                         </div>
                       </div>
                     </div>
-                  </li>
-                }
+                  </div>
+                </li>
               </ul>
-            </ng-template>
+              <div class="col-lg-4 m-t-10">
+              <div class="grid">
+                <button class="grid b-rad-20" mat-stroked-button 
+                  (click)="mostrarApartadoExtra = !mostrarApartadoExtra"><span class="text-truncate w-100"> Ocultar detalles
+                  </span></button>
+              </div>
+            </div>
+            </app-card>
+          </div>
+          <!-- Fin del apartado extra -->
+
+          <ng-template #Transaction>
+            <ul class="list-group list-group-flush">
+              @for (task of List_transactionEvent; track task) {
+              <li class="list-group-item">
+                <div class="flex align-item-center">
+                  <div class="flex-shrink-0">
+                    <div class="avatar avatar-s border {{ task.bg }}" matTooltip="{{ task.tooltip }}">{{ task.icon }}
+                    </div>
+                  </div>
+                  <div class="flex-grow-1 m-l-15">
+                    <div class="row g-1">
+                      <div class="col-6">
+                        <p class="m-b-0">{{ task.name }}</p>
+                      </div>
+                      <div class="col-6 text-end">
+                        <p class="{{ task.amount_type }} m-b-0"><i class="{{ task.amount_position }}"></i> {{
+                          task.percentage }} </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 m-t-10">
+                      <div class="grid">
+                        <button class="grid b-rad-20"
+                          (click)="verDetallesCalendario(task)"
+                          mat-stroked-button ><span
+                            class="text-truncate w-100">Ver detalles del calendario</span></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              }
+            </ul>
+          </ng-template>
 
         </div>
       </div>

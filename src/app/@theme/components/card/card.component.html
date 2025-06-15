@@ -18,4 +18,9 @@
       <ng-container *ngTemplateOutlet="actionTemplate"></ng-container>
     </mat-card-actions>
   }
+  @if (actionTemplate2) {
+    <mat-card-actions [ngClass]="actionClass()">
+      <ng-container *ngTemplateOutlet="actionTemplate2"></ng-container>
+    </mat-card-actions>
+  }
 </mat-card>
