@@ -1,11 +1,25 @@
 <div class="row p-t-25">
   <div class="col-12">
     <app-card cardTitle="Hello card">
-      <p
-        >Gestión de eventos</p
-      >
+      <p>Gestión de eventos</p>
       <h2>Crear Evento</h2>
 
+      <form (ngSubmit)="crearEvento()">
+        <div class="form-group mb-3">
+          <label for="eventName">Nombre del evento</label>
+          <input type="text" id="eventName" class="form-control" placeholder="Nombre del evento" required [(ngModel)]="nombreEvento" name="nombreEvento">
+        </div>
+        <br>
+        <div class="form-group mb-3">
+          <label for="eventDescription">Descripción del evento</label>
+          <textarea id="eventDescription" class="form-control" placeholder="Descripción del evento" required [(ngModel)]="descripcionEvento" name="descripcionEvento"></textarea>
+        </div>
+        <div class="form-group mb-3">
+          <label for="startDate">Fecha del evento</label>
+          <input type="date" id="startDate" class="form-control" required [(ngModel)]="fechaEvento" name="fechaEvento">
+        </div>
+        <button type="submit" class="btn btn-primary">Crear</button>
+      </form>
 
     </app-card>
   </div>

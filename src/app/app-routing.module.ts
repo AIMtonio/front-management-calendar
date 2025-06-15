@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import DashboardComponent from './demo/pages/dashboard/dashboard.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
+
 
 import { AdminComponent } from './demo/layout/admin';
 import { EmptyComponent } from './demo/layout/empty';
@@ -30,6 +32,14 @@ const routes: Routes = [
       {
         path: 'events-management',
         loadComponent: () => import('./demo/pages/events-management/events-management.component')
+      },
+      {
+        path: 'view-events',
+        loadComponent: () => import('./demo/pages/view-events/view-events.component')
+      },
+       {
+        path: 'custom-calendar',
+        loadComponent: () => import('./demo/pages/custom-calendar/custom-calendar.component')
       }
     ]
   },
@@ -48,7 +58,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    FullCalendarModule
   ],
   exports: [RouterModule]
 })

@@ -64,6 +64,7 @@ export default class LoginComponent {
       if (resp.success == true) {
         console.log('exito:', resp.data);
         localStorage.setItem('token', resp.data);
+        sessionStorage.setItem('uuid_user', resp.uuid_user);
         this.router.navigate(['/dashboard']);
         return;
         return;

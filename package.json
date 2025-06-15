@@ -24,6 +24,8 @@
     "@angular/platform-browser": "19.0.5",
     "@angular/platform-browser-dynamic": "19.0.5",
     "@angular/router": "19.0.5",
+    "@fullcalendar/angular": "^6.1.17",
+    "@fullcalendar/daygrid": "^6.1.17",
     "apexcharts": "3.49.0",
     "ng-apexcharts": "1.10.0",
     "ngx-scrollbar": "16.1.1",

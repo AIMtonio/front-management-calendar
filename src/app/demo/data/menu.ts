@@ -204,6 +204,26 @@ export const menus: Navigation[] = [
         icon: '#custom-shield',
         target: false,
         breadcrumbs: false
+      },
+      {
+        id: 'view-events',
+        title: 'Mys eventos',
+        type: 'item',
+        classes: 'nav-item',
+        url: '/view-events',
+        icon: '#custom-shield',
+        target: false,
+        breadcrumbs: false
+      },
+       {
+        id: 'custom-calendar',
+        title: 'Crear calendario',
+        type: 'item',
+        classes: 'nav-item',
+        url: '/custom-calendar',
+        icon: '#custom-shield',
+        target: false,
+        breadcrumbs: false
       }
     ]
   }
