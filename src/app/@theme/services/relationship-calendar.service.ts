@@ -19,7 +19,7 @@ export class RelationshipCalendar {
     this._URL = `${environment.apiUrl}/relationship-calendar`;
   }
 
-  async crearCustomCalendar(data: any){
+  async new(data: any){
     let authorizationHeaders = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': 'Content-Type',
@@ -37,5 +37,13 @@ export class RelationshipCalendar {
     return this.http.post(`${this._URL}/findRelationshipByCalendar`, data, { headers: authorizationHeaders }).toPromise();
   }
 
+  async consultarInfoClientesByCalendar(data: any){
+    let authorizationHeaders = new HttpHeaders({
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Authorization': `Bearer ${this.tokenAuth}`,
+    });
+    return this.http.post(`${this._URL}/findRelationshipByUser`, data, { headers: authorizationHeaders }).toPromise();
+  }
  
 }

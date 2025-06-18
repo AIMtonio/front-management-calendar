@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 export class LoginService {
 
   private _URL: string = '';
+  private tokenAuth: string = localStorage.getItem('token') || '';
 
   constructor(private http: HttpClient) 
   {
@@ -24,6 +25,15 @@ export class LoginService {
       });
 
       return this.http.post(`${this._URL}/login`, data, { headers: authorizationHeaders });
+  }
+
+  async findUserByEmail(data: any){
+    let authorizationHeaders = new HttpHeaders({
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Authorization': `Bearer ${this.tokenAuth}`,
+    });
+    return this.http.post(`${this._URL}/validateUserByCustomCalendar`, data, { headers: authorizationHeaders }).toPromise();
   }
 
  

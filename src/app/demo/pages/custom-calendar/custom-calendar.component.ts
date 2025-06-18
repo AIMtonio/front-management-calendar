@@ -5,11 +5,15 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import { ChartDB } from 'src/app/fake-data/chartDB';
 import { CommonModule } from '@angular/common';
 import { Evento } from '../../data/Evento';
+import { User } from '../../data/User';
+import Swal from 'sweetalert2';
 
 import { ApexOptions, ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { CustomCalendar } from '../../data/CustomCalendar';
 import { CustomCalendarService } from 'src/app/@theme/services/custom-calendar.service';
 import { RelationshipCalendar } from 'src/app/@theme/services/relationship-calendar.service';
+import { LoginService } from 'src/app/@theme/services/login.service';
+import { Response } from '../../data/Response';
 
 @Component({
   selector: 'app-view-events',
@@ -37,8 +41,11 @@ export default class ViewEvents implements OnInit {
   incomeColors = ['#4680FF', '#E58A00', '#2CA87F', '#b5ccff'];
 
   mostrarFormulario = false;
+  emailUser: string = '';
+  cve_calendar: string = '';
   valorExtra: string = '';
-  mostrarApartadoExtra = false;
+  taskSeleccionado: any = null;
+  mostrarApartadoDetallesCalendario = false;
   calendar_name: string = '';
   detalleCalendarioSeleccionado: any = null;
   fechaEvento: string = '';
@@ -46,12 +53,15 @@ export default class ViewEvents implements OnInit {
   uuid_user: any = '';
   calendarPlugins = [dayGridPlugin];
   eventos: Evento[] = [];
+  users: User[] = [];
+  mostrarFormularioAgregarClientes = false;
 
   CustomCalendars: CustomCalendar[] = [];
 
   constructor(
     private customCalendarService:  CustomCalendarService,
     private relationshipCalendar: RelationshipCalendar,
+    private userService: LoginService,
   ) { 
     this.chartDB = ChartDB;
     const {
@@ -115,6 +125,14 @@ export default class ViewEvents implements OnInit {
       }
     ];
 
+    List_users = [
+      {
+        uuid_user: "xxx",
+        full_name: "xxx",
+        email: "xxx"
+      }
+    ];
+
   async ConsultarCustomCalendar() {
     
     try {
@@ -126,6 +144,11 @@ export default class ViewEvents implements OnInit {
       const res = await this.customCalendarService.consultarCustomCalendar(body) as { data: CustomCalendar[] };
 
       this.CustomCalendars = res.data;
+      if (this.CustomCalendars.length === 0) {
+        console.warn('No se encontraron calendarios personalizados para el usuario.');
+        alert('No se encontraron calendarios personalizados para el usuario.');
+        return;
+      }
 
       this.List_transactionEvent = this.CustomCalendars.map(CustomCalendar => ({
         icon: 'AI',
@@ -177,12 +200,13 @@ export default class ViewEvents implements OnInit {
   }
 
   async verDetallesCalendario(task: any) {
-    
     try {
 
       this.detalleCalendarioSeleccionado = task;
-      this.mostrarApartadoExtra = true;
+      this.mostrarApartadoDetallesCalendario = true;
       this.valorExtra = task.name;
+      this.mostrarFormulario = false;
+      this.cve_calendar = task.cve_calendar;
 
       let body = {
         uuid_user_create: this.uuid_user,
@@ -190,10 +214,13 @@ export default class ViewEvents implements OnInit {
       };
 
       const res = await this.relationshipCalendar.consultarRelationshipCalendar(body) as { data: Evento[] };
-
       this.eventos = res.data;
 
-      console.log('Eventos:', this.eventos);
+      if (this.eventos === null || this.eventos.length === 0) {
+        this.alerta('info', 'Sin resultados', 'No se encontraron eventos para este calendario.');
+        this.mostrarApartadoDetallesCalendario = false;
+        return;
+      }
 
       this.List_transactionEvent2 = this.eventos.map(evento => ({
         icon: 'AI',
@@ -211,11 +238,18 @@ export default class ViewEvents implements OnInit {
         create_at: task.create_at
       }));
 
+      const bodyInfoUsuarios = {
+        cve_calendar: task.cve_calendar
+      };
+      const usersInCalendar = await this.relationshipCalendar.consultarInfoClientesByCalendar(bodyInfoUsuarios) as {data: User[]};
 
-      return; 
-      const resp = await this.customCalendarService.crearCustomCalendar(body);
-      console.log('Respuesta del servidor:', resp);
+      this.users = usersInCalendar.data;
 
+      this.List_users = this.users.map(user => ({
+        uuid_user: user.uuid_user,
+        full_name: user.full_name,
+        email: user.email
+      }));
 
     }
     catch (error) {
@@ -225,9 +259,59 @@ export default class ViewEvents implements OnInit {
     
   }
 
-  
+  async agregarClienteACalendario(task: any) {
+    try {
 
-  
+      if( !this.emailUser) {
+        console.error('Formulario inválido: faltan campos obligatorios.');
+        return;
+      }
+
+      const cve_calendarCast = task;
+      const userEmail = this.emailUser;
+      const uuidUser = this.uuid_user;
+      
+      const bodyAsignacionCalendario = {
+        cve_calendar: cve_calendarCast,
+        uuid_user_create: uuidUser,
+        email_user_relationship: userEmail,
+      }
+
+      const responseValidateUser = await this.relationshipCalendar.new(bodyAsignacionCalendario) as Response;
+
+      if( responseValidateUser.success === false) {
+        this.alerta('error', 'Error al agregar el usuario', responseValidateUser.message);
+        this.emailUser = '';
+        return;
+      }
+
+      this.emailUser = '';
+      this.ConsultarCustomCalendar();
+
+      this.alerta('success', 'Usuario agregado', responseValidateUser.message);
+
+    }
+    catch (error) {
+      console.error('Error al crear el evento:', error);
+      alert('Error al crear el evento. Por favor, inténtalo de nuevo más tarde.');
+    }
+    
+  }
+
+   async alerta(icon: 'success' | 'error' | 'warning' | 'info' | 'question', title: string, text: string) {
+    if( !icon || !title || !text) {
+      console.error('Error: icon, title, and text are required for the alert.');
+      return;
+    }
+    
+    Swal.fire({
+      icon: icon ?? 'info',
+      title: title ?? 'Información',
+      text: text ?? 'No hay información disponible.',
+      confirmButtonColor: '#3085d6'
+    });
+  }
+
 
 }
 
